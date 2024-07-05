@@ -1,0 +1,14 @@
+import datetime
+
+# input of calculated dates
+f_date_input = input("input first date in format (YYYY-MM-DD-HH-mm-ss): ")
+f_date = datetime.datetime(*map(int, f_date_input.split('-')))
+
+e_date_input = input("input last date in format (YYYY-MM-DD-HH-mm-ss): ")
+e_date = datetime.datetime(*map(int, e_date_input.split('-')))
+
+gap_l = e_date - f_date
+print('Difference: ', gap_l)
+
+h = divmod(gap_l.total_seconds(), 3600)[0]
+print('Difference in hours: ', h)
