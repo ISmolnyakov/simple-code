@@ -1,0 +1,7 @@
+def main():
+    n = 152124
+    # n = int(input("Введите число: "))
+    print(n % 10000)
+
+if __name__ == "__main__":
+    main()
