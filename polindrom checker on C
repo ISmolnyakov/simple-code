@@ -1,0 +1,30 @@
+#include <stdio.h>
+
+int main() {
+    char str1[500];
+    char str2[500];
+    scanf("%s", str1);
+    int length;
+    int count = 0;
+    int flag = 0;
+    while (str1[length] != '\0') {
+        length++;
+    }
+    int l = length - 1;
+    for (int i = l; 0 < i; i--) {
+        str2[count] = str1[i];
+        count++;
+    }
+    for (int i = 0; i < l; i++) {
+        if(str1[i] != str2[i])
+        {
+         flag = 1;
+        }
+    }
+    if (flag == 0) {
+        printf("polindrom");
+    } else {
+        printf("net");
+    }
+    return 0;
+}
