@@ -1,0 +1,117 @@
+import random
+from telebot import TeleBot, types
+import config #token and photo url are kept here
+import jokes #list of jokes
+import messages #list of text for replies 
+
+token = config.bot_token
+bot = TeleBot(token)
+
+#reply to /start
+@bot.message_handler(commands=['start'])
+def reply_to_start(message: types.Message):
+    bot.send_message(
+        message.chat.id,
+        messages.welcome
+    )
+
+#reply to /help
+@bot.message_handler(commands=['help'])
+def reply_to_help(message: types.Message):
+    bot.send_message(
+        message.chat.id,
+        messages.help_menu
+    )
+
+#reply to /joke
+@bot.message_handler(commands=['joke'])
+def send_joke(message: types.Message):
+    bot.send_message(
+        message.chat.id,
+        random.choice(jokes.jl)
+    )
+
+#reply to /dogs
+@bot.message_handler(commands=['dogs'])
+def send_dogs(message: types.Message):
+    bot.send_photo(
+        message.chat.id,
+        config.photo_url,
+        'Here is a power dog to you!',
+        reply_to_message_id=message.id
+    )
+
+#reply to sticker
+@bot.message_handler(content_types=['sticker'])
+def reply_to_sticker(message: types.Message):
+    bot.send_message(
+        message.chat.id,
+        'Шикарный стикер пак!!!',
+        reply_to_message_id=message.id
+    )
+
+#reply to gif
+@bot.message_handler(content_types=['animation'])
+def reply_to_gif(message: types.Message):
+    bot.send_message(
+        message.chat.id,
+        'Обожаю гифки!',
+        reply_to_message_id=message.id
+    )
+
+
+#checker for 'cat' in caption to the photo
+def cats_in_caption_check(message: types.Message):
+    return message.caption and 'кот' in message.caption.lower()
+
+#reply to a photo of a cat
+@bot.message_handler(content_types=['photo'], func=cats_in_caption_check)
+def send_reply_to_cats(message: types.Message):
+    if cats_in_caption_check:
+        bot.send_message(
+            message.chat.id,
+            'Шикарный котик!',
+            reply_to_message_id=message.message_id
+        )
+    else:
+        photo_file_id = message.photo[-1].file_id
+        bot.send_photo(
+            message.chat.id,
+            photo_file_id,
+            reply_to_message_id=message.message_id
+        )
+
+#reply to any photo
+@bot.message_handler(content_types=['photo'])
+def send_photo_reply(message: types.Message):
+    photo_file_id = message.photo[-1].file_id
+    bot.send_photo(
+        message.chat.id,
+        photo_file_id,
+        reply_to_message_id=message.message_id
+    )
+
+#reply to text msg
+@bot.message_handler()
+def echo_meaasge(message: types.Message):
+    text = message.text
+    text_lower = text.lower()
+    if 'привет' in text_lower:
+        bot.send_message(
+            message.chat.id,
+            messages.privet
+        )
+    elif 'как дела' in text_lower:
+        bot.send_message(
+            message.chat.id,
+            messages.how
+        )
+    elif 'пока' in text_lower or 'до свидания' in text_lower:
+        bot.send_message(
+            message.chat.id,
+            messages.bb
+        )
+    bot.send_message(message.chat.id, text)
+
+#this keeps your bot alive till u shut it down
+bot.infinity_polling(skip_pending=True)
