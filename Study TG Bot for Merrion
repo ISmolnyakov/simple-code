@@ -91,6 +91,20 @@ def send_photo_reply(message: types.Message):
         reply_to_message_id=message.message_id
     )
 
+#RANDOM NUMBER GENERATOR AS TXT FILE
+@bot.message_handler(commands=['gen_txt'])
+def send_generated_txt(message: types.Message):
+    file = StringIO()
+    file.write("Your random number: ")
+    file.write(str(random.randint(a=1, b=100)))
+    file.seek(0)
+    gen = types.InputFile(file)
+    bot.send_document(
+        message.chat.id,
+        document=gen,
+        visible_file_name="Your random number.txt"
+    )
+
 #reply to text msg
 @bot.message_handler()
 def echo_meaasge(message: types.Message):
