@@ -1,5 +1,8 @@
 import random
+from io import StringIO
+
 from telebot import TeleBot, types
+
 import config #token and photo url are kept here
 import jokes #list of jokes
 import messages #list of text for replies 
